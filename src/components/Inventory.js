@@ -10,7 +10,7 @@ class Inventory extends React.Component {
         deleteFish: PropTypes.func,
         loadSampleFishes: PropTypes.func,
     };
-    
+
     render() {
         return (
             <div className="inventory">
