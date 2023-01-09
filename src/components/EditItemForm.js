@@ -2,19 +2,6 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 
 const EditItemForm = ({index, fish, updateFish, deleteFish}) => {
-    const propTypes = {
-        // Shape is used when describing an obj where key data types are known ahead of time
-        fish: PropTypes.shape({
-            image: PropTypes.string,
-            name: PropTypes.string,
-            desc: PropTypes.string, 
-            status: PropTypes.string, 
-            price: PropTypes.number
-        }),
-        index: PropTypes.string,
-        updateFish: PropTypes.func,
-    };
-
     const handleChange = (event) => {
         // Update the fish, go upstream back into app
         //console.log(event.currentTarget.value);
