@@ -3,12 +3,20 @@ import PropTypes from 'prop-types';
 
 const EditItemForm = ({index, fish, updateFish, deleteFish}) => {
     // Local store of form data
+    // Initial state needs to pull from fish (and check undefined edge case)
+    // Can't assign base attributes name, price etc to fish, only form
+    // Since we'll manipulate form only
     const [form, setForm] = useState({
-        name: fish.name, price: fish.price, status: fish.status, desc: fish.desc, image: fish.image,
+        name: (fish) ? fish.name : '', 
+        price: (fish) ? fish.price : '', 
+        status: (fish) ? fish.status : '', 
+        desc: (fish) ? fish.desc : '', 
+        image: (fish) ? fish.image : '',
     });
     const { name, price, status, desc, image } = form;
 
     const betweenTwentyChars = (value) => value && value.length < 20 && value.length > 0
+    const isANumber = (value) => value && !isNaN(value);
     const handleKeystroke = (event, validator) => {
         // Handle keystrokes to affect state, not the database
         // Uses optional validator for some inputs, can add new ones for say price, url
@@ -31,7 +39,7 @@ const EditItemForm = ({index, fish, updateFish, deleteFish}) => {
     return (
         <div className='fish-edit'>
             <input type='text' name='name' value={name} onChange={(e) => handleKeystroke(e, betweenTwentyChars)}/>
-            <input type='text' name='price' value={price} onChange={(e) => handleKeystroke(e)}/>
+            <input type='text' name='price' value={price} onChange={(e) => handleKeystroke(e, isANumber)}/>
             <select type='text' name='status' value={status} onChange={(e) => handleKeystroke(e)}>
                 <option value='available'>Fresh!</option>
                 <option value='unavailable'>Sold out!</option>
