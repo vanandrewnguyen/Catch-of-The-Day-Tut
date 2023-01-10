@@ -2,43 +2,53 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 
 const EditItemForm = ({index, fish, updateFish, deleteFish}) => {
-    const handleChange = (event) => {
-        // Update the fish, go upstream back into app
-        //console.log(event.currentTarget.value);
-        //console.log(typeof event.currentTarget.value);
+    // Local store of form data
+    const [form, setForm] = useState({
+        name: fish.name, price: fish.price, status: fish.status, desc: fish.desc, image: fish.image,
+    });
+    const { name, price, status, desc, image } = form;
 
-        // Could maybe store set datatypes and lock them another way? Maybe in global enum or dictionary...
-        // Too hard-coded
-        let newVal = event.currentTarget.value;
-        if (event.currentTarget.name === 'price') {
-            newVal = Number(newVal);
+    const betweenTwentyChars = (value) => value && value.length < 20 && value.length > 0
+    const handleKeystroke = (event, validator) => {
+        // Handle keystrokes to affect state, not the database
+        // Uses optional validator for some inputs, can add new ones for say price, url
+        if (validator && !validator(event.currentTarget.value)) {
+            alert(`Doesn't match conditions.`);
+            return; 
         }
-        const newFish = { 
-            ...fish,
-            [event.currentTarget.name]: newVal
-        };
-
-        updateFish(index, newFish);
+        setForm({...form, [event.currentTarget.name]: event.currentTarget.value});
     }
+
+    const sendUpdate = (index) => {
+        // Create a new obj and send this to the database, only on button press
+        const updatedFish = {
+            name, price: Number(price), status, desc, image,
+        }
+        updateFish(index, updatedFish);
+    } 
 
     // Edit from component class: changes to access for fish attributes and functions.
     return (
         <div className='fish-edit'>
-            <input type='text' name='name' value={fish.name} onChange={(e) => handleChange(e)}/>
-            <input type='text' name='price' value={fish.price} onChange={(e) => handleChange(e)}/>
-            <select type='text' name='status' >
+            <input type='text' name='name' value={name} onChange={(e) => handleKeystroke(e, betweenTwentyChars)}/>
+            <input type='text' name='price' value={price} onChange={(e) => handleKeystroke(e)}/>
+            <select type='text' name='status' value={status} onChange={(e) => handleKeystroke(e)}>
                 <option value='available'>Fresh!</option>
                 <option value='unavailable'>Sold out!</option>
             </select>
-            <textarea name='desc' value={fish.desc} onChange={(e) => handleChange(e)}/>
-            <input type='text' name='image' value={fish.image} onChange={(e) => handleChange(e)}/>
+            <textarea name='desc' value={desc} onChange={(e) => handleKeystroke(e)}/>
+            <input type='text' name='image' value={image} onChange={(e) => handleKeystroke(e)}/>
 
             <button onClick={() => deleteFish(index)}>Remove Fish</button>
+            <button onClick={() => sendUpdate(index)}>Update Fish</button>
         </div>
     )
 }
 
 export default EditItemForm;
+
+
+
 
 /*
 old class
