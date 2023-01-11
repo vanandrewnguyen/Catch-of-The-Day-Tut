@@ -12,7 +12,7 @@ const AddItemForm = ({ addFish }) => {
     const { name, price, status, description, image } = form
 
     const createFish = (event) => {
-        event.preventDefault();
+        //event.preventDefault();
         const fish = {
             name,
             price: parseFloat(price),
@@ -29,9 +29,11 @@ const AddItemForm = ({ addFish }) => {
     const maxTenChars = (field, value) => value && value.length < 10
     const setValue = (field, validator) => (e) => {
         const value = e.target.value;
-        if (validator && validator(field, value)) {
-            setForm({...form, [field]: value});
+        if (validator && !validator(field, value)) {
+            alert(`Doesn't match conditions.`);
+            return; 
         }
+        setForm({...form, [field]: value});
     }
 
     return (
@@ -44,7 +46,7 @@ const AddItemForm = ({ addFish }) => {
         </select>
         <textarea name="desc" value={description} onChange={setValue('description')} placeholder='Desc' />
         <input name="image" value={image} onChange={setValue('image')} type="text" placeholder='Image' />
-        <button type="submit">+ Add Fish</button>
+        <button type="submit" onClick={() => createFish()}>+ Add Fish</button>
         </form>
     );
 }

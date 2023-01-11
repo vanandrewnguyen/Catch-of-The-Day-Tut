@@ -31,6 +31,7 @@ describe('Test main menu renders', () => {
 })
 
 // Check loading sample fishes works 
+// need to reload the page -> fresh start
 describe('Test loading sample fishes', () => {
     test('Base render', async () => {
         // Call render function
@@ -50,5 +51,28 @@ describe('Test loading sample fishes', () => {
     });
 })
 
+
+
+
+
+
+/*
+Fixture?
+describe('Render main menu Component', () => {
+    test('Base render', () => {
+        // Call render function
+        render(<Router />);
+
+        // Check it displays normally
+        const inputTitle = screen.getByText(`Please enter a store:`);
+        const selectButton = screen.getByText(`Visit store`);
+        expect(inputTitle).toBeInTheDocument();
+        expect(selectButton).toBeInTheDocument();
+        
+        // Click into the main app
+        fireEvent.click(selectButton);
+    });
+})
+*/
 
 

@@ -31,7 +31,7 @@ describe('Test main menu renders', () => {
 })
 
 // Check adding custom fish works 
-describe('Test adding custom fish', () => {
+describe('Test adding custom fish', async () => {
     test('Base render', () => {
         // Call render function
         const { container } = render(<Router />);
@@ -40,14 +40,35 @@ describe('Test adding custom fish', () => {
         const nameInput = container.querySelector(`input[name="name"]`);
         expect(nameInput).toBeInTheDocument();
         fireEvent.click(nameInput);
-        fireEvent.change(nameInput, { target: { value : "new fish "}});
+        fireEvent.change(nameInput, { target: { value : "name"}});
 
+        const priceInput = container.querySelector(`input[name="price"]`);
+        expect(priceInput).toBeInTheDocument();
+        fireEvent.click(priceInput);
+        fireEvent.change(priceInput, { target: { value : "100"}});
+
+        const descInput = container.querySelector(`textarea[name="desc"]`);
+        expect(descInput).toBeInTheDocument();
+        fireEvent.click(descInput);
+        fireEvent.change(descInput, { target: { value : "desc"}});
+
+        const imageInput = container.querySelector(`input[name="image"]`);
+        expect(imageInput).toBeInTheDocument();
+        fireEvent.click(imageInput);
+        fireEvent.change(imageInput, { target: { value : "urltest"}});
+
+        const addButton = container.querySelector(`button[type="submit"]`);
+        expect(addButton).toBeInTheDocument();
+        //fireEvent.click(addButton); ??? breaks test in other file 'Remove Fish'
     });
 })
 
-
 // Check removing fish from menu works
-
+describe('Test removing custom fish', () => {
+    test('Base render', () => {
+        
+    });
+})
 
 // Check editing fish from menu works
 
