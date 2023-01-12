@@ -50,6 +50,7 @@ class App extends React.Component {
         // Add new fish
         // Modify state (not directly)
         fishes[`fish${Date.now()}`] = fish;
+        console.log(fish);
         this.setState({
             fishes: fishes
         });
