@@ -9,7 +9,7 @@ import StorePicker from '../components/StorePicker';
 
 // Check loading sample fishes works 
 // need to reload the page -> fresh start
-describe('Test loading sample fishes', () => {
+describe('Test loading and removing sample fishes', () => {
     test('Base', async () => {
         // Call render function
         const { container } = render(<Router exact path="/" component={StorePicker} />);
@@ -43,57 +43,20 @@ describe('Test loading sample fishes', () => {
         await new Promise(resolve => setTimeout(resolve, 2000));
 
         // Check fish has loaded
-        const lobsterText = await waitFor(() => screen.queryAllByText(`Lobster`));
+        const halibutText = await waitFor(() => screen.queryAllByText(`Pacific Halibut`));
         await waitFor(() => {
-            expect(lobsterText[0]).toBeInTheDocument();
+            expect(halibutText[0]).toBeInTheDocument();
         });
 
-        /*
-
-        // Check renders
-        
-        // In main menu now, check renders properly
-        let tagline, orderTag, inventoryTag; 
+        // Check we even have a removal button
+        const removeButton = await waitFor(() => screen.queryAllByText(`Remove Fish`));
         await waitFor(() => {
-            tagline = screen.getByText(`Fresh catches daily`);
-            orderTag = screen.getByText(`Order`);
-            inventoryTag = screen.getByText(`Inventory`);
-
-            expect(tagline).toBeInTheDocument();
-            expect(orderTag).toBeInTheDocument();
-            expect(inventoryTag).toBeInTheDocument();
+            expect(removeButton[0]).toBeInTheDocument();
         });
+        fireEvent.click(removeButton[0]);
 
-        // Load sample fishes from database
-        let loadButton;
-        await waitFor(() => {
-            loadButton = screen.getByText(`Load Sample Fishes`);
-            expect(loadButton).toBeInTheDocument();
-            
-        });
-        
-        fireEvent.click(loadButton);
-        
-        console.log(container.querySelector('p').elements);
-        console.log(container);
-
-        // Need to wait a bit, since the sample fishes take less than a second to load
-        await waitFor(() => {
-            new Promise((r) => setTimeout(r, 1000));
-            
-        });
-
-        // Remove one fish
-        let removeButton;
-        await waitFor(() => {
-            removeButton = screen.getAllByText('Remove Fish')[0];
-            expect(removeButton).toBeInTheDocument();
-        });
-
-        await waitFor(() => {
-            
-        });
-        */
+        // Check fish has been removed
+        expect(halibutText[0]).not.toBeInTheDocument();
     });
 })
 
