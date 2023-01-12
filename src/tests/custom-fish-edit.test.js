@@ -9,6 +9,6 @@ import StorePicker from '../components/StorePicker';
 
 describe('Test editing a fish on the existing menu', () => {
     test('Base', async () => {
-        
+        expect(true).toBe(true);
     });
 });
