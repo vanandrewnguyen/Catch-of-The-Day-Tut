@@ -4,6 +4,7 @@ import { formatPrice } from "../helpers";
 import { getFunName } from "../helpers";
 import { adjectives } from '../helpers';
 import { nouns } from '../helpers';
+import { waitFor } from '@testing-library/react';
 
 // Formatting slugify Function
 test('Format basic string', () => {
@@ -59,18 +60,18 @@ test('Format trailing decimals', () => {
     expect(formatPrice('99')).toBe('$0.99');
 });
 
-// Formatting random string name
-// Use regex to seperate words
-const generatedName = getFunName();
-const adjective1 = generatedName.match('(.*)-.*-.*')[1];
-const adjective2 = generatedName.match('.*-(.*)-.*')[1];
-const noun = generatedName.match('.*-.*-(.*)')[1];
+test('Generate random name', async () => {
+    // Formatting random string name
+    // Use regex to seperate words
+    const generatedName = await waitFor(() => getFunName());
+    const adjective1 = generatedName.match('(.*)-.*-.*')[1];
+    const adjective2 = generatedName.match('.*-(.*)-.*')[1];
+    const noun = generatedName.match('.*-.*-(.*)')[1];
 
-const matches = adjectives.includes(adjective1) && 
-                adjectives.includes(adjective2) && 
-                nouns.includes(noun);
+    const matches = adjectives.includes(adjective1) && 
+                    adjectives.includes(adjective2) && 
+                    nouns.includes(noun);
 
-test('Generate random name', () => {
     expect(matches).toBe(true);
 });
 
