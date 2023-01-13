@@ -6,6 +6,7 @@ import { toBeInTheDocument } from '@testing-library/jest-dom';
 // Import components
 import Router from '../components/Router';
 import StorePicker from '../components/StorePicker';
+import { formatPrice } from '../helpers';
 
 // Check adding custom fish works 
 describe('Test adding and removing custom fish', () => {
@@ -14,9 +15,6 @@ describe('Test adding and removing custom fish', () => {
         const { container } = render(<Router exact path="/" component={StorePicker} />);
 
         // Input unique name for the store
-        const storeNameInput = container.querySelector(`input[type="text"]`);
-        fireEvent.click(storeNameInput);
-        userEvent.type(storeNameInput, `uniqueName`);
         const selectButton = await waitFor(() => screen.getByText(`Visit store`));
         expect(selectButton).toBeInTheDocument();
         fireEvent.click(selectButton);
@@ -27,61 +25,55 @@ describe('Test adding and removing custom fish', () => {
 
         // Edit the form
         // Don't know if this is the 'right way' since should be blackbox -> through screen.getByText
+        
+        // Input name into form
         const nameInput = await waitFor(() => container.querySelector(`input[name="name"]`));
         await waitFor(() => {
             expect(nameInput).toBeInTheDocument();
         });
         fireEvent.click(nameInput);
-        userEvent.type(nameInput, `fishname`);
+        const fishName = `fishname`;
+        await userEvent.type(nameInput, fishName);
+        expect(nameInput).toHaveValue(fishName);
+        const fishNameInput = await waitFor(() => screen.getByDisplayValue(fishName));
+        expect(fishNameInput).toBeInTheDocument();
 
+        // Input price into form
+        await userEvent.tab();
         const priceInput = await waitFor(() => container.querySelector(`input[name="price"]`));
-        await waitFor(() => {
-            expect(priceInput).toBeInTheDocument();
-        });
-        fireEvent.click(priceInput);
-        userEvent.type(priceInput, `100`);
+        const fishPrice = `1234`;
+        await userEvent.type(priceInput, fishPrice);
+        const fishPriceInput = await waitFor(() => screen.getByDisplayValue(fishPrice));
+        expect(fishPriceInput).toBeInTheDocument();
 
+        // Input desc
+        await userEvent.tab();
+        await userEvent.tab();
         const descInput = await waitFor(() => container.querySelector(`textarea[name="desc"]`));
-        await waitFor(() => {
-            expect(descInput).toBeInTheDocument();
-        });
-        fireEvent.click(descInput);
-        userEvent.type(descInput, `fishdesc`);
+        const fishDesc = `fishdesc`;
+        await userEvent.type(descInput, fishDesc);
+        const fishDescInput = await waitFor(() => screen.getByDisplayValue(fishDesc));
+        expect(fishDescInput).toBeInTheDocument();
 
+        // Input image
+        await userEvent.tab();
         const imageInput = await waitFor(() => container.querySelector(`input[name="image"]`));
-        await waitFor(() => {
-            expect(imageInput).toBeInTheDocument();
-        });
-        fireEvent.click(imageInput);
-        userEvent.type(imageInput, `urltest`);
+        const fishImage = `fishurl`;
+        await userEvent.type(imageInput, fishImage);
+        const fishImageInput = await waitFor(() => screen.getByDisplayValue(fishImage));
+        expect(fishImageInput).toBeInTheDocument();
 
-        // Wait for fish to load
-        await new Promise(resolve => setTimeout(resolve, 500));
-
-        // Add
+        // Finally, save that fish
         const addButton = await waitFor(() => container.querySelector(`button[type="submit"]`));
         await waitFor(() => {
             expect(addButton).toBeInTheDocument();
         });
-        fireEvent.click(addButton); //?? breaks the async test in sampleFish test
-        
-        /*
-        logging from app.js -> shows what the fish obj is...
-        todo: double check input values are correct
+        fireEvent.click(addButton);
 
-        console.log
-        {
-            name: '',
-            price: NaN,
-            status: '',
-            desc: '',
-            image: 'uf1funi0iris0slqhhtundeeaesNmstaecme'
-        }
-
-        at addFish (src/components/App.js:53:17)
-        ???
-
-        */
-
+        // Check it exists by checking price tag exists ($12.34) because 1234 alr exists
+        const priceTag = await waitFor(() => screen.getAllByText(formatPrice(fishPrice)));
+        await waitFor(() => {
+            expect(priceTag[0]).toBeInTheDocument();
+        });
     });
 })

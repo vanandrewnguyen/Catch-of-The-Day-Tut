@@ -36,9 +36,10 @@ const AddItemForm = ({ addFish }) => {
         setForm({...form, [field]: value});
     }
 
+    // todo, onChange={setValue('name', maxTenChars)} was original
     return (
         <form className="fish-edit" onSubmit={() => createFish()}>
-        <input name="name" value={name} onChange={setValue('name', maxTenChars)} type="text" placeholder='Name' />
+        <input name="name" value={name} onChange={setValue('name')} type="text" placeholder='Name' />
         <input name="price" value={price} onChange={setValue('price')} type="text" placeholder='Price' />
         <select name="status" value={status} onChange={setValue('status')}>
             <option value="avaliable">Fresh!</option>
