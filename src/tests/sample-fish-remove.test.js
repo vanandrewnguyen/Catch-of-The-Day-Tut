@@ -58,11 +58,6 @@ describe('Test loading and removing sample fishes', () => {
         // Check fish has been removed
         expect(halibutText[0]).not.toBeInTheDocument();
     });
-})
-
-
-test("Sanity check", () => {
-    expect(true).toBe(true);
 });
 
 

@@ -30,4 +30,4 @@ describe('Render main menu Component', () => {
         // Should fail, since we aren't on the storepicker
         expect(inputTitle).not.toBeInTheDocument();
     });
-})
+});
